@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\DB;
 use App\Scopes\RestaurantScope;
 use App\Models\Translation;
 use App\Models\Brands;
+use App\Models\Attribute;
 use Box\Spout\Writer\Common\Creator\Style\StyleBuilder;
 
 class Fixed_ProductsController extends Controller
@@ -32,8 +33,33 @@ class Fixed_ProductsController extends Controller
     }
 
     public function store(Request $request)
-    {
-        
+    {   
+        $Attributes = [];
+
+
+        //return $request->attribute_id;
+
+        foreach ($request->attribute_id as $attribute) {
+
+            
+            $subs = [];
+            $attr =  Attribute::find($attribute);
+
+             $attr->sub_attributes = json_decode($attr->sub_attributes);
+
+            foreach ($attr->sub_attributes as $sub ) {
+
+                if($sub->state != 0){
+                    array_push($subs,$sub->Title );
+                }
+            }
+
+            
+            array_push($Attributes, [$attr->name => $subs] );
+        }
+
+
+      //  return $Attributes;
         
         $validator = Validator::make($request->all(), [
             'name.0' => 'required',
@@ -48,20 +74,6 @@ class Fixed_ProductsController extends Controller
             'name.0.required' => trans('messages.item_name_required'),
             'category_id.required' => trans('messages.category_required'),
         ]);
-
-        // if ($request['discount_type'] == 'percent') {
-        //     $dis = ($request['price'] / 100) * $request['discount'];
-        // } else {
-        //     $dis = $request['discount'];
-        // }
-
-        // if ($request['price'] <= $dis) {
-        //     $validator->getMessageBag()->add('unit_price', trans('messages.discount_can_not_be_more_than_or_equal'));
-        // }
-
-        // if ($request['price'] <= $dis || $validator->fails()) {
-        //     return response()->json(['errors' => Helpers::error_processor($validator)]);
-        // }
 
         $Fixed_Products = new Fixed_Products;
         $Fixed_Products->name = $request->name[array_search('en', $request->lang)];
@@ -132,13 +144,10 @@ class Fixed_ProductsController extends Controller
 
         //$Fixed_Products->variations = json_encode($variations);
         $Fixed_Products->image = $images;
-        $Fixed_Products->attributes =  json_encode($request->subs);
+        $Fixed_Products->attributes =  json_encode( $Attributes);
         $Fixed_Products->restaurant_id = $request->restaurant_id;
         $Fixed_Products->veg = 0;
         $Fixed_Products->brand_id = $request->brand_id;
-        
-        $sizes = json_encode($request['sizes']);
-        $Fixed_Products->sizes = $sizes;
         
 
         
@@ -597,7 +606,7 @@ class Fixed_ProductsController extends Controller
 
 
 
-        $products = Fixed_Products::select('name','description','image','Category_id','category_ids','brand_id','attributes', 'brand_id')->get();
+        $products = Fixed_Products::select('name','description','image','category_id','category_ids','brand_id','attributes', 'brand_id')->get();
         //  $products = DB::table('fixed_products')
         //  ->join('categories', 'fixed_products.category_id', '=', 'Categories.id')
         //  ->select('fixed_products.name','description' , 'categories.name')

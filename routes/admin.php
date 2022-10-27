@@ -1,6 +1,6 @@
 <?php
 
- use Illuminate\Support\Facades\Route;
+ //use Illuminate\Support\Facades\Route;
 
 Route::get('lang/{locale}', [App\Http\Controllers\LanguageController::class,'switchLang']);
 

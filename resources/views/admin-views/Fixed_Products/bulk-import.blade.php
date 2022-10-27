@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title','Food Bulk Import')
+@section('title','Product Bulk Export')
 
 @push('css_or_js')
 
@@ -18,7 +18,7 @@
                 <li class="breadcrumb-item">{{trans('messages.bulk_import')}} </li>
             </ol>
         </nav>
-        <h1 class="text-capitalize">{{__('messages.foods')}} {{__('messages.bulk_import')}}</h1>
+        <h1 class="text-capitalize">{{__('messages.product')}} {{__('messages.bulk_import')}}</h1>
         <!-- Content Row -->
         <div class="row">
             <div class="col-12">
@@ -31,7 +31,7 @@
                     <p>3. Once you have downloaded and filled the format file, upload it in the form below and
                         submit.</p>
 
-                    <p> 4. After uploading foods you need to edit them and set image and variations.</p>
+                    <p> 4. After uploading Products you need to edit them and set image and variations.</p>
 
                     <p> 5. You can get restaurant id from their list, please input the right ids.</p>
 

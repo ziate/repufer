@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title','Food Bulk Export')
+@section('title','Product Bulk Export')
 
 @push('css_or_js')
 
@@ -13,7 +13,7 @@
                 <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">{{trans('messages.dashboard')}}</a>
                 </li>
                 <li class="breadcrumb-item" aria-current="page"><a
-                        href="{{route('admin.food.list')}}">{{trans('messages.foods')}}</a>
+                        href="{{route('admin.food.list')}}">{{trans('messages.Products')}}</a>
                 </li>
                 <li class="breadcrumb-item">{{trans('messages.bulk_export')}} </li>
             </ol>
@@ -22,7 +22,7 @@
 
         <div class="card mt-2 rest-part">
             <div class="card-header">
-                <h4>Export Foods</h4>
+                <h4>Export Products</h4>
             </div>
             <div class="card-body">
                 <form class="product-form" action="{{route('admin.Fixed_Products.bulk-export')}}" method="POST"

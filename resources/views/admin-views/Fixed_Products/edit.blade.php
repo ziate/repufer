@@ -318,7 +318,7 @@
                             @if($product['image'] != null)
                                 @foreach(json_decode($product['image']) as $img)
                                     <img style="height: 200px;border: 1px solid; border-radius: 10px;" id="viewer"
-                                         src="{{asset('storage/app/public/product')}}/{{$img}}"
+                                         src="{{asset('public/public/asset/admin/product')}}/{{$img}}"
                                          alt="product image"/>
                                 @endforeach
                             @endif
@@ -385,11 +385,7 @@
                 getRequest('{{url('/')}}/admin/Fixed_Products/get-categories?parent_id=' + sub_category + '&sub_category=' + sub_sub_category, 'sub-sub-categories');
 
             }, 1000)
-            @if(count(json_decode($product['add_ons'], true))>0)
-            getRestaurantData('{{url('/')}}/admin/vendor/get-addons?@foreach(json_decode($product['add_ons'], true) as $addon)data[]={{$addon}}@endforeach&restaurant_id=','{{$product['restaurant_id']}}','add_on');
-            @else
-            getRestaurantData('{{url('/')}}/admin/vendor/get-addons?data[]=0&restaurant_id=','{{$product['restaurant_id']}}','add_on');
-            @endif
+
         });
     </script>
 

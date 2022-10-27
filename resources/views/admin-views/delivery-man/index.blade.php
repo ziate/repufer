@@ -187,7 +187,7 @@
         $("#customFileEg1").change(function () {
             readURL(this);
         });
-        @php($country=\App\Models\BusinessSetting::where('key','country')->first())
+        var country1 =  '{{strtolower(App\Models\BusinessSetting::where('key','country')->first()->value)}}'
         var phone = $("#phone").intlTelInput({
             utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/8.4.6/js/utils.js",
             autoHideDialCode: true,
@@ -195,10 +195,14 @@
             dropdownContainer: document.body,
             formatOnDisplay: true,
             hiddenInput: "phone",
-            initialCountry: "{{$country?$country->value:auto}}",
+            initialCountry: country1,
             placeholderNumberType: "MOBILE",
-            separateDialCode: true
+            separateDialCode: true,
+            setCountry:country1
         });
+        
+       
+
         // $("#phone").on('change', function(){
         //     $(this).val(phone.getNumber());
         // })

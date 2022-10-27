@@ -159,18 +159,7 @@
                                 </select>
                             </div>
                         </div>
-                        {{--<div class="col-md-4 col-6">
-                            <div class="form-group">
-                                <label class="input-label" for="exampleFormControlSelect1">Sub Sub Category<span
-                                        class="input-label-secondary"></span></label>
-                                <select name="sub_sub_category_id" id="sub-sub-categories"
-                                        data-id="{{count($product_category)>=3?$product_category[2]->id:''}}"
-                                        class="form-control js-select2-custom">
 
-                                </select>
-                            </div>
-                        </div>--}}
-                        
                         
                         <div class="col-md-6 col-12">
                             <div class="form-group">
@@ -317,11 +306,7 @@
                 getRequest('{{url('/')}}/admin/food/get-categories?parent_id=' + sub_category + '&sub_category=' + sub_sub_category, 'sub-sub-categories');
             
             }, 1000)
-            @if(count(json_decode($product['add_ons'], true))>0)
-            getRestaurantData('{{url('/')}}/admin/vendor/get-addons?@foreach(json_decode($product['add_ons'], true) as $addon)data[]={{$addon}}@endforeach&restaurant_id=','{{$product['restaurant_id']}}','add_on');
-            @else
-            getRestaurantData('{{url('/')}}/admin/vendor/get-addons?data[]=0&restaurant_id=','{{$product['restaurant_id']}}','add_on');
-            @endif
+        
         });
     </script>
 
