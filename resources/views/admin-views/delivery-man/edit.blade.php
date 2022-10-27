@@ -81,6 +81,18 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-6 col-12">
+                            <div class="form-group">
+                                <label class="input-label" for="exampleFormControlInput1">{{__('messages.vehicletype')}} </label>
+                                <select name="vehicle_type" class="form-control">
+                                    <option {{$delivery_man->vehicle_type == 'car' ?'selected':''}} value="car">{{__('messages.car')}}</option>
+                                    <option {{$delivery_man->vehicle_type == 'motorcycle' ?'selected':''}} value="motorcycle"> {{__('messages.motorcycle')}}</option>
+                                    <option {{$delivery_man->vehicle_type == 'bike' ?'selected':''}} value="bike"> {{__('messages.bike')}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="row">
                         <div class="col-sm-6 col-12">

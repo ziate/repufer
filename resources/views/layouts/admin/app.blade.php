@@ -6,6 +6,9 @@
     <!-- Title -->
     <title>@yield('title')</title>
     <!-- Favicon -->
+
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     @php($logo=\App\Models\BusinessSetting::where(['key'=>'icon'])->first()->value)
     <link rel="shortcut icon" href="">
     <link rel="icon" type="image/x-icon" href="{{asset('storage/app/public/business/'.$logo??'')}}">

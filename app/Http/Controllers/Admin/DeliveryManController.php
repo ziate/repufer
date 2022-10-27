@@ -116,6 +116,8 @@ class DeliveryManController extends Controller
         $dm->active = 0;
         $dm->earning = $request->earning;
         $dm->password = bcrypt($request->password);
+        $dm->vehicle_type= $request->vehicle_type;
+        
         $dm->save();
 
         Toastr::success(trans('messages.deliveryman_added_successfully'));
@@ -248,6 +250,7 @@ class DeliveryManController extends Controller
         $delivery_man->identity_image = $identity_image;
         $delivery_man->image = $image_name;
         $delivery_man->earning = $request->earning;
+        $delivery_man->vehicle_type= $request->vehicle_type;
         $delivery_man->password = strlen($request->password)>1?bcrypt($request->password):$delivery_man['password'];
         $delivery_man->save();
         Toastr::success(trans('messages.deliveryman_updated_successfully'));

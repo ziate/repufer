@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\DB;
 use App\Scopes\RestaurantScope;
 use App\Models\Translation;
 use App\Models\Brands;
-
+use Box\Spout\Writer\Common\Creator\Style\StyleBuilder;
 
 class Fixed_ProductsController extends Controller
 {
@@ -34,13 +34,12 @@ class Fixed_ProductsController extends Controller
     public function store(Request $request)
     {
         
-        // dd(json_encode($request['nls']));
+        
         $validator = Validator::make($request->all(), [
             'name.0' => 'required',
             'name.*' => 'max:191',
             'category_id' => 'required',
             'image' => 'required',
-            'price' => 'required|numeric|between:.01,999999999999.99',
             'discount' => 'numeric|min:0',
             'restaurant_id' => '',
             'description.*' => 'max:1000',
@@ -50,19 +49,19 @@ class Fixed_ProductsController extends Controller
             'category_id.required' => trans('messages.category_required'),
         ]);
 
-        if ($request['discount_type'] == 'percent') {
-            $dis = ($request['price'] / 100) * $request['discount'];
-        } else {
-            $dis = $request['discount'];
-        }
+        // if ($request['discount_type'] == 'percent') {
+        //     $dis = ($request['price'] / 100) * $request['discount'];
+        // } else {
+        //     $dis = $request['discount'];
+        // }
 
-        if ($request['price'] <= $dis) {
-            $validator->getMessageBag()->add('unit_price', trans('messages.discount_can_not_be_more_than_or_equal'));
-        }
+        // if ($request['price'] <= $dis) {
+        //     $validator->getMessageBag()->add('unit_price', trans('messages.discount_can_not_be_more_than_or_equal'));
+        // }
 
-        if ($request['price'] <= $dis || $validator->fails()) {
-            return response()->json(['errors' => Helpers::error_processor($validator)]);
-        }
+        // if ($request['price'] <= $dis || $validator->fails()) {
+        //     return response()->json(['errors' => Helpers::error_processor($validator)]);
+        // }
 
         $Fixed_Products = new Fixed_Products;
         $Fixed_Products->name = $request->name[array_search('en', $request->lang)];
@@ -92,19 +91,7 @@ class Fixed_ProductsController extends Controller
         $Fixed_Products->description =  $request->description[array_search('en', $request->lang)];
 
         $choice_options = [];
-        if ($request->has('choice')) {
-            foreach ($request->choice_no as $key => $no) {
-                $str = 'choice_options_' . $no;
-                if ($request[$str][0] == null) {
-                    $validator->getMessageBag()->add('name', trans('messages.attribute_choice_option_value_can_not_be_null'));
-                    return response()->json(['errors' => Helpers::error_processor($validator)]);
-                }
-                $item['name'] = 'choice_' . $no;
-                $item['title'] = $request->choice[$key];
-                $item['options'] = explode(',', implode('|', preg_replace('/\s+/', ' ', $request[$str])));
-                array_push($choice_options, $item);
-            }
-        }
+
         $Fixed_Products->choice_options = json_encode($choice_options);
         $variations = [];
         $options = [];
@@ -143,16 +130,9 @@ class Fixed_ProductsController extends Controller
 
         $images = json_encode($images);
 
-        $Fixed_Products->variations = json_encode($variations);
-        $Fixed_Products->price = $request->price;
+        //$Fixed_Products->variations = json_encode($variations);
         $Fixed_Products->image = $images;
-        $Fixed_Products->available_time_starts = $request->available_time_starts;
-        $Fixed_Products->available_time_ends = $request->available_time_ends;
-        $Fixed_Products->discount = $request->discount_type == 'amount' ? $request->discount : $request->discount;
-        $Fixed_Products->discount_type = $request->discount_type;
-
-        $Fixed_Products->attributes = $request->has('attribute_id') ? json_encode($request->attribute_id) : json_encode([]);
-        $Fixed_Products->add_ons = $request->has('addon_ids') ? json_encode($request->addon_ids) : json_encode([]);
+        $Fixed_Products->attributes =  json_encode($request->subs);
         $Fixed_Products->restaurant_id = $request->restaurant_id;
         $Fixed_Products->veg = 0;
         $Fixed_Products->brand_id = $request->brand_id;
@@ -160,10 +140,7 @@ class Fixed_ProductsController extends Controller
         $sizes = json_encode($request['sizes']);
         $Fixed_Products->sizes = $sizes;
         
-        // dd(collect(json_decode($sizes))['20ml']);
-        
-        $nls = json_encode($request['nls']);
-        $Fixed_Products->nls = $nls;
+
         
         $Fixed_Products->save();
 
@@ -229,29 +206,12 @@ class Fixed_ProductsController extends Controller
             'name.0' => 'required',
             'name.*' => 'max:191',
             'category_id' => 'required',
-            'price' => 'required|numeric|between:.01,999999999999.99',
-            'discount' => 'numeric|min:0',
             'restaurant_id' => '',
             'description.*' => 'max:1000',
         ], [
-            'description.*.max' => trans('messages.description_length_warning'),
             'name.0.required' => trans('messages.item_name_required'),
             'category_id.required' => trans('messages.category_required'),
         ]);
-
-        if ($request['discount_type'] == 'percent') {
-            $dis = ($request['price'] / 100) * $request['discount'];
-        } else {
-            $dis = $request['discount'];
-        }
-
-        if ($request['price'] <= $dis) {
-            $validator->getMessageBag()->add('unit_price', trans('messages.discount_can_not_be_more_than_or_equal'));
-        }
-
-        if ($request['price'] <= $dis || $validator->fails()) {
-            return response()->json(['errors' => Helpers::error_processor($validator)]);
-        }
 
         $p = Fixed_Products::withoutGlobalScope(RestaurantScope::class)->find($id);
 
@@ -336,28 +296,20 @@ class Fixed_ProductsController extends Controller
 
 
         $p->variations = json_encode($variations);
-        $p->price = $request->price;
         $p->image = $request->has('image') ? $images : $p->image;
-        $p->available_time_starts = $request->available_time_starts;
-        $p->available_time_ends = $request->available_time_ends;
 
-        $p->discount = $request->discount_type == 'amount' ? $request->discount : $request->discount;
-        $p->discount_type = $request->discount_type;
+
 
         $p->attributes = $request->has('attribute_id') ? json_encode($request->attribute_id) : json_encode([]);
-        $p->add_ons = $request->has('addon_ids') ? json_encode($request->addon_ids) : json_encode([]);
         $p->restaurant_id = $request->restaurant_id;
         $p->veg = 0;
         $p->brand_id = $request->brand_id;
         
-        // dd($request['sizes']);
-        $sizes = json_encode($request['sizes']);
-        $p->sizes = $sizes;
+
+
         
-        // dd(collect(json_decode($sizes))['20ml']);
-        
-        $nls = json_encode($request['nls']);
-        $p->nls = $nls;
+        // $nls = json_encode($request['nls']);
+        // $p->nls = $nls;
         
         $p->save();
 
@@ -585,31 +537,21 @@ class Fixed_ProductsController extends Controller
             try
             {
                 DB::beginTransaction();
-                if ($collection['name_en'] === "" || $collection['name_ar'] === "" || $collection['category_id'] === "" || $collection['sub_category_id'] === "" || $collection['price'] === "" || $collection['shop_id'] === "") {
+                if ($collection['name'] === "" || $collection['name'] === "description" ||  $collection['category_id'] === ""  ) {
                     Toastr::error(trans('messages.please_fill_all_required_fields'));
                     return back();
                 }
 
                 $data = [
-                    'name'                      => $collection['name_en'],
-                    'description'               => $collection['description_en'],
-                    'category_id'               => $collection['sub_category_id'] ? $collection['sub_category_id'] : $collection['category_id'],
-                    'category_ids'              => json_encode([['id' => $collection['category_id'], 'position' => 0], ['id' => $collection['sub_category_id'], 'position' => 1]]),
-                    'veg'                       => 0,  //$request->item_type;
-                    'price'                     => $collection['price'],
-                    'discount'                  => $collection['discount'],
-                    'discount_type'             => $collection['discount_type'],
-
+                    'name'                      => $collection['name'],
+                    'description'               => $collection['description'],
+                    'category_id'               => $collection['category_id'] ,
+                    'category_ids'               => $collection['category_ids'] ,
                     'image'                     => $collection['image'],
-                    'restaurant_id'             => $collection['shop_id'],
-                    // Brand_id
-                    'brand_id'                  => $collection['brand_id'],
-                    'add_ons'                   => json_encode([]),
-                    'attributes'                => json_encode([]),
+                    'brand_id'                  => $collection['brand_id'], 
+                    'attributes'                => $collection['attributes'], 
                     'choice_options'            => json_encode([]),
                     'variations'                => json_encode([]),
-//                    'created_at'                => now(),
-//                    'updated_at'                => now()
                 ];
                 $food = Fixed_Products::create($data);
                 $data_translation = [];
@@ -618,14 +560,14 @@ class Fixed_ProductsController extends Controller
                     'translationable_id' => $food->id,
                     'locale' => 'ar',
                     'key' => 'name',
-                    'value' => $collection['name_ar'],
+                    'value' => $collection['name'],
                 );
                 $data_translation[] = array(
                     'translationable_type' => 'App\Models\Fixed_Products',
                     'translationable_id' => $food->id,
                     'locale' => 'ar',
                     'key' => 'description',
-                    'value' =>  $collection['description_ar'],
+                    'value' =>  $collection['description'],
                 );
                 Translation::insert($data_translation);
                 DB::commit();
@@ -647,14 +589,20 @@ class Fixed_ProductsController extends Controller
 
     public function bulk_export_data(Request $request)
     {
-        // $request->validate([
-        //     'type'=>'required',
-        //     'start_id'=>'required_if:type,id_wise',
-        //     'end_id'=>'required_if:type,id_wise',
-        //     'from_date'=>'required_if:type,date_wise',
-        //     'to_date'=>'required_if:type,date_wise'
-        // ]);
-        $products = Fixed_Products::select('name','description','image','category_id','category_ids','price','brand_id')->get();
-        return (new FastExcel($products))->download('Fixed_Productss.xlsx');
+        $header_style = (new StyleBuilder())
+        ->setShouldWrapText()
+        ->setCellAlignment('center')
+        ->setFontBold()
+        ->build();
+
+
+
+        $products = Fixed_Products::select('name','description','image','Category_id','category_ids','brand_id','attributes', 'brand_id')->get();
+        //  $products = DB::table('fixed_products')
+        //  ->join('categories', 'fixed_products.category_id', '=', 'Categories.id')
+        //  ->select('fixed_products.name','description' , 'categories.name')
+        //  ->get();
+        
+        return (new FastExcel($products))->headerStyle($header_style)->download('Fixed_Productss.xlsx');
     }
 }

@@ -91,7 +91,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    {{-- <div class="row">
                         <div class="col-md-3 col-6">
                             <div class="form-group">
                                 <label class="input-label" for="exampleFormControlInput1">{{__('messages.price')}}</label>
@@ -132,7 +132,7 @@
                             <!--    </select>-->
                             <!--</div>-->
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class="row">
                         <div class="col-md-3 col-12">
@@ -235,7 +235,7 @@
                     
                     @php($sizes = collect(json_decode($product['sizes'])))
                     @php($nls = json_decode($product['nls']))
-
+{{-- 
                     <div class="row">
                             @foreach(\App\Models\Sizes::get() as $size)
                                 <div class="col-md-3">
@@ -247,9 +247,9 @@
                                     </div>
                                 </div>
                             @endforeach
-                        </div>
+                        </div> --}}
                         
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="col-12">
                                 <div class="form-group">
                                     <label class="input-label" for="exampleFormControlSelect1">NL<span
@@ -267,15 +267,15 @@
                             </div>
                         </div>
                         
+                         --}}
                         
-                        
                     
                     
                     
                     
                     
                     
-
+{{-- 
                     <div class="row mt-2">
                         <div class="col-12">
                             <div class="form-group">
@@ -285,7 +285,7 @@
                                 </select>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <!--<div class="row">-->
                     <!--    <div class="col-6">-->

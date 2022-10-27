@@ -224,7 +224,7 @@
                                     <option value="DM">Dominica</option>
                                     <option value="DO">Dominican Republic</option>
                                     <option value="EC">Ecuador</option>
-                                    <option value="EG">Egypt</option>
+                                    <option selected value="EG">Egypt</option>
                                     <option value="SV">El Salvador</option>
                                     <option value="GQ">Equatorial Guinea</option>
                                     <option value="ER">Eritrea</option>

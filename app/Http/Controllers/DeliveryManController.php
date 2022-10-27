@@ -24,6 +24,8 @@ class DeliveryManController extends Controller
 
     public function store(Request $request)
     {
+
+       
         $status = BusinessSetting::where('key', 'toggle_dm_registration')->first();
         if(!isset($status) || $status->value == '0')
         {
@@ -31,20 +33,20 @@ class DeliveryManController extends Controller
             return back();
         }
 
-        $request->validate([
-            'f_name' => 'required|max:100',
-            'l_name' => 'nullable|max:100',
-            'identity_number' => 'required|max:30',
-            'email' => 'required|unique:delivery_men',
-            'phone' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:10|unique:delivery_men',
-            'zone_id' => 'required',
-            'earning' => 'required',
-            'password'=>'required|min:6',
-        ], [
+         $request->validate([
+             'f_name' => 'required|max:100',
+         'l_name' => 'nullable|max:100',
+             'identity_number' => 'required|max:30',
+             'email' => 'required|unique:delivery_men',
+             'phone' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:10|unique:delivery_men',
+             'zone_id' => 'required',
+             'earning' => 'required',
+             'password'=>'required|min:6',
+     ], [
             'f_name.required' => trans('messages.first_name_is_required'),
-            'zone_id.required' => trans('messages.select_a_zone'),
-            'earning.required' => trans('messages.select_dm_type')
-        ]);
+         'zone_id.required' => trans('messages.select_a_zone'),
+             'earning.required' => trans('messages.select_dm_type')
+     ]);
 
         if ($request->has('image')) {
             $image_name = Helpers::upload('delivery-man/', 'png', $request->file('image'));
@@ -76,7 +78,8 @@ class DeliveryManController extends Controller
         $dm->active = 0;
         $dm->earning = $request->earning;
         $dm->password = bcrypt($request->password);
-        $dm->application_status= 'pending';
+        $dm->application_status= 'pending';     
+        $dm->vehicle_type= $request->vehicle_type;
         $dm->save();
 
         Toastr::success(trans('messages.application_placed_successfully'));

@@ -116,9 +116,17 @@ class BusinessSettingsController extends Controller
             'value' => $request['admin_commission']
         ]);
 
-        DB::table('business_settings')->updateOrInsert(['key' => 'country'], [
+        DB::table('business_settings')->updateOrInsert(['key' => 'country']
+        
+
+        , [
+
+            'key' => 'country',   
             'value' => $request['country']
         ]);
+
+      //  return $request['country'];
+
 
         DB::table('business_settings')->updateOrInsert(['key' => 'default_location'], [
             'value' => json_encode(['lat'=>$request['latitude'], 'lng'=>$request['longitude']]) 

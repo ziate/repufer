@@ -12,10 +12,17 @@ return [
     'account_transaction_removed'=>'Account transaction removed!',
     'access_denied'=>'Access Denied !',
     'access_token'=>'Access Token',
-    'add' => 'Add',
+    'add' => 'Add', 
+    'vehicletype'=>'Vehicle type', 
     'add_new_food'=>'Add new product',
     'add_delivery_man'=>'Add Delivery Man',
     'add_customer'=>'Register new customer',
+
+    'car' => 'car',
+    'bike' => 'bike ',
+    'motorcycle' => 'motorcycle',
+
+
     'update_discount'=>'Update discount',
     'update_tax'=>'Update tax',
     'addon' => 'Addon',

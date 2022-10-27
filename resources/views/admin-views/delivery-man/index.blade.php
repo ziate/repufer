@@ -80,6 +80,18 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-6 col-12">
+                            <div class="form-group">
+                                <label class="input-label" for="exampleFormControlInput1">{{__('messages.vehicletype')}} </label>
+                                <select name="vehicle_type" class="form-control">
+                                    <option value="car">{{__('messages.car')}}</option>
+                                    <option value="motorcycle"> {{__('messages.motorcycle')}}</option>
+                                    <option value="bike"> {{__('messages.bike')}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="row">
                         <div class="col-md-6 col-12">

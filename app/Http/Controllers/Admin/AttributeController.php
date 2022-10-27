@@ -27,7 +27,25 @@ class AttributeController extends Controller
             'name.required' => trans('messages.Name is required!'),
             'attributesInputs.required' => 'sub attributes is required!',
         ]);
-        $sub_attributes = json_encode($request->attributesInputs);
+        
+        //return $request->attributesInputs[3];
+
+        $sub_arrayed =  $request->attributesInputs;
+
+        $sub_attributes = [];
+
+        foreach ($sub_arrayed as $sub) {
+
+            array_push($sub_attributes,['Title' => $sub , 'state' => 1 ]);
+
+            
+        }
+
+
+
+        $sub_attributes = json_encode($sub_attributes);
+
+     
         $attribute = new Attribute;
         $attribute->name = $request->name;
         $attribute->sub_attributes =$sub_attributes;
@@ -40,7 +58,35 @@ class AttributeController extends Controller
     public function edit($id)
     {
         $attribute = Attribute::findOrFail($id);
-        return view('admin-views.attribute.edit', compact('attribute'));
+
+        $sub_attr = json_decode($attribute['sub_attributes']);
+
+        return view('admin-views.attribute.edit', compact('attribute','sub_attr'));
+    }
+
+    public function update_sub_attribute(request $request){
+
+      $attr =  Attribute::findOrFail($request->id);
+
+      $attr_modfied = json_decode($attr->sub_attributes);
+
+      $attr_modfied[$request->index]->state =  $attr_modfied[$request->index]->state == 1 ? 0:1;
+
+
+      $attr_modfied = json_encode($attr_modfied);
+
+      
+
+
+
+      $attr->sub_attributes = $attr_modfied;
+
+      $attr->save();
+
+    
+        
+
+
     }
 
     public function update(Request $request, $id)

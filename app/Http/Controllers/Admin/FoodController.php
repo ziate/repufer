@@ -586,24 +586,20 @@ class FoodController extends Controller
             try
             {
                 DB::beginTransaction();
-                if ($collection['name_en'] === "" || $collection['name_ar'] === "" || $collection['category_id'] === "" || $collection['sub_category_id'] === "" || $collection['price'] === "" || $collection['shop_id'] === "") {
+                if ($collection['name'] === ""  || $collection['category_id'] === "" || $collection['price'] === "" ) {
                     Toastr::error(trans('messages.please_fill_all_required_fields'));
                     return back();
                 }
 
                 $data = [
-                    'name'                      => $collection['name_en'],
-                    'description'               => $collection['description_en'],
+                    'name'                      => $collection['name'],
+                    'description'               => $collection['description'],
                     'category_id'               => $collection['sub_category_id'] ? $collection['sub_category_id'] : $collection['category_id'],
                     'category_ids'              => json_encode([['id' => $collection['category_id'], 'position' => 0], ['id' => $collection['sub_category_id'], 'position' => 1]]),
-                    'veg'                       => 0,  //$request->item_type;
+                    'veg'                       => 0,
                     'price'                     => $collection['price'],
-                    'discount'                  => $collection['discount'],
-                    'discount_type'             => $collection['discount_type'],
-
                     'image'                     => $collection['image'],
                     'restaurant_id'             => $collection['shop_id'],
-                    // Brand_id
                     'brand_id'                  => $collection['brand_id'],
                     'add_ons'                   => json_encode([]),
                     'attributes'                => json_encode([]),

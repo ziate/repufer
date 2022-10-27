@@ -349,7 +349,7 @@
             
             
             
-            <!-- Sizes & NL -->
+            {{-- <!-- Sizes & NL -->
                 @if(\App\CentralLogics\Helpers::module_permission_check('Brands'))
                     <li class="nav-item">
                         <small class="nav-subtitle"
@@ -380,7 +380,7 @@
                 @endif
             <!-- End Sizes & NL -->
             
-            
+             --}}
             
             
 
@@ -598,7 +598,7 @@
                     @endif
                     <!-- End Attributes -->
 
-                    <!-- AddOn -->
+                    {{-- <!-- AddOn -->
                     @if(\App\CentralLogics\Helpers::module_permission_check('addon'))
                         <li class="navbar-vertical-aside-has-menu {{Request::is('admin/addon*')?'active':''}}">
                             <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle"
@@ -635,7 +635,7 @@
                             </ul>
                         </li>
                     @endif
-                <!-- End AddOn -->
+                <!-- End AddOn --> --}}
                 <!-- Food -->
                     @if(\App\CentralLogics\Helpers::module_permission_check('food'))
                         <li class="navbar-vertical-aside-has-menu {{Request::is('admin/food*')?'active':''}}">

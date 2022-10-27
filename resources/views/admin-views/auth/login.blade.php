@@ -118,7 +118,7 @@
                             <!-- End Checkbox -->
 
                             {{-- recaptcha --}}
-                            @php($recaptcha = \App\CentralLogics\Helpers::get_business_settings('recaptcha'))
+                            {{-- @php($recaptcha = \App\CentralLogics\Helpers::get_business_settings('recaptcha'))
                             @if(isset($recaptcha) && $recaptcha['status'] == 1)
                                 <div id="recaptcha_element" style="width: 100%;" data-type="image"></div>
                                 <br/>
@@ -132,7 +132,7 @@
                                         <img src="<?php echo $custome_recaptcha->inline(); ?>" style="width: 100%; border-radius: 4px;"/>
                                     </div>
                                 </div>
-                            @endif
+                            @endif --}}
 
                             <button type="submit" class="btn btn-lg btn-block btn-primary">{{__('messages.sign_in')}}</button>
                         </form>
@@ -200,6 +200,7 @@
 
 {{-- recaptcha scripts start --}}
 @if(isset($recaptcha) && $recaptcha['status'] == 1)
+dsadsa
     <script type="text/javascript">
         var onloadCallback = function () {
             grecaptcha.render('recaptcha_element', {

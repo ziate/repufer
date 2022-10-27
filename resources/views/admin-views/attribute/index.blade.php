@@ -162,6 +162,7 @@
     </script>
     <script>
         $('#search-form').on('submit', function () {
+
             var formData = new FormData(this);
             $.ajaxSetup({
                 headers: {

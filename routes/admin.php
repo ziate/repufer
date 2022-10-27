@@ -1,6 +1,6 @@
 <?php
 
-// use Illuminate\Support\Facades\Route;
+ use Illuminate\Support\Facades\Route;
 
 Route::get('lang/{locale}', [App\Http\Controllers\LanguageController::class,'switchLang']);
 
@@ -159,6 +159,11 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::post('store', 'AttributeController@store')->name('store');
             Route::get('edit/{id}', 'AttributeController@edit')->name('edit');
             Route::post('update/{id}', 'AttributeController@update')->name('update');
+
+
+            Route::post('sub_attribute', 'AttributeController@update_sub_attribute')->name('update_sub_attribute');
+
+
             Route::delete('delete/{id}', 'AttributeController@delete')->name('delete');
             Route::post('search', 'AttributeController@search')->name('search');
 

@@ -73,7 +73,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    {{-- <div class="row">
                         <div class="col-md-3 col-6">
                             <div class="form-group">
                                 <label class="input-label" for="exampleFormControlInput1">{{__('messages.price')}}</label>
@@ -98,7 +98,7 @@
                             </div>
                         </div>
 
-                    </div>
+                    </div> --}}
 
                     <div class="row">
                         <div class="col-md-3 col-12">
@@ -171,7 +171,7 @@
                                         class="form-control js-select2-custom"
                                         multiple="multiple">
                                     @foreach(\App\Models\Attribute::orderBy('name')->get() as $attribute)
-                                        <option value="{{$attribute['id']}}">{{$attribute['name']}}</option>
+                                        <option id="{{$attribute['sub_attributes']}}" value="{{$attribute['id']}}">{{$attribute['name']}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -179,27 +179,14 @@
 
                         <div class="col-md-12 mt-2 mb-2">
                             <div class="customer_choice_options" id="customer_choice_options">
-
+                                        
                             </div>
                         </div>
                         <div class="col-md-12 mt-2 mb-2">
-                            <div class="variant_combination" id="variant_combination">
 
-                            </div>
                         </div>
                     </div>
 
-                    <div class="row mt-2">
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label class="input-label" for="exampleFormControlSelect1">{{__('messages.addon')}}<span
-                                        class="input-label-secondary" title="{{__('messages.restaurant_required_warning')}}"><img src="{{asset('/public/assets/admin/img/info-circle.svg')}}" alt="{{__('messages.restaurant_required_warning')}}"></span></label>
-                                <select name="addon_ids[]" class="form-control js-select2-custom" multiple="multiple" id="add_on">
-
-                                </select>
-                            </div>
-                        </div>
-                    </div>
 
                     <div class="row">
                         <div class="col-6">
@@ -218,35 +205,7 @@
                         </div>
                     </div>
                     
-                        <div class="row">
-                            @foreach(\App\Models\Sizes::get() as $size)
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label class="input-label" for="exampleFormControlSelect1">{{__('messages.price')}} {{ $size->size }}  <span
-                                                class="input-label-secondary"></span></label>
-                                        <input type="number" name="sizes[{{ $size->size }}]" class="form-control">
-                                        
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label class="input-label" for="exampleFormControlSelect1">NL<span
-                                            class="input-label-secondary"></span></label>
-                                    <select name="nls[]" 
-                                            class="form-control js-select2-custom"
-                                            multiple="multiple">
-                                        @foreach(\App\Models\Nl::get() as $nl)
-                                            <option value="{{$nl['nl']}}">{{$nl['nl']}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        
+    
 
                     <div class="form-group">
                         <label>{{__('messages.Fixed_Products')}} {{__('messages.image')}}</label><small style="color: red">* ( {{__('messages.ratio')}} 1:1 )</small>
@@ -267,6 +226,7 @@
             </div>
         </div>
     </div>
+
 
 @endsection
 
@@ -351,22 +311,41 @@
         $('#choice_attributes').on('change', function () {
             $('#customer_choice_options').html(null);
             $.each($("#choice_attributes option:selected"), function () {
-                if($(this).val().length > 50)
-                {
-                    toastr.error('{{__('validation.max.string',['attribute'=>__('messages.variation'),'max'=>'50'])}}', {
-                        CloseButton: true,
-                        ProgressBar: true
-                    });
-                    return false;
-                }
-                add_more_customer_choice_option($(this).val(), $(this).text());
+
+              
+                
+
+                let subs =  JSON.parse($(this)[0].id)
+
+                add_more_customer_choice_option($(this).val(), $(this).text() , subs );
+
+
             });
         });
 
-        function add_more_customer_choice_option(i, name) {
+        function add_more_customer_choice_option(i, name,subs) {
+    
             let n = name;
-            $('#customer_choice_options').append('<div class="row"><div class="col-md-3"><input type="hidden" name="choice_no[]" value="' + i + '"><input type="text" class="form-control" name="choice[]" value="' + n + '" placeholder="{{__('messages.choice_title')}}" readonly></div><div class="col-lg-9"><input type="text" class="form-control" name="choice_options_' + i + '[]" placeholder="{{__('messages.enter_choice_values')}}" data-role="tagsinput" onchange="combination_update()"></div></div>');
+            
+            $('#customer_choice_options').append('<div class="row"><div  class="col-md-3"><input type="hidden" name="choice_no[]" value="' + i + '"><input type="text" class="form-control" name="choice[]" value="' + n + '"  readonly></div><div class="col-lg-9"><input type="text" class="form-control" name="choice_options_' + i + '[]"  data-role="tagsinput" onchange="combination_update()"></div></div>');
+           
             $("input[data-role=tagsinput], select[multiple][data-role=tagsinput]").tagsinput();
+
+            for (let index = 0; index < subs.length; index++) {
+                if(subs[index].state === 1){
+                    $('.bootstrap-tagsinput').append(`<span onclick='RemoveSpan(this)' class="tag label label-primary">${subs[index].Title}<span data-role="remove"></span></span>`)
+                }else {
+                    continue
+                }
+                
+             
+            }
+
+          
+        }
+        
+        function RemoveSpan(aa){
+           aa.remove()
         }
 
         function combination_update() {
@@ -399,7 +378,25 @@
     <script>
         $('#Fixed_Products_form').on('submit', function (e) {
             e.preventDefault();
+
+            subs = [];
+            
+            $.each($('.bootstrap-tagsinput span'),function(){
+                if($(this)[0].innerText != ''){
+                    subs.push($(this)[0].innerText);
+                }
+                
+            })
+
+
             var formData = new FormData(this);
+
+            formData.append('subs' , subs)
+
+            console.log(formData);
+
+
+
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -430,7 +427,7 @@
                             ProgressBar: true
                         });
                         setTimeout(function () {
-                            location.href = '{{\Request::server('HTTP_REFERER')??route('admin.Fixed_Products.list')}}';
+                         //   location.href = '{{\Request::server('HTTP_REFERER')??route('admin.Fixed_Products.list')}}';
                         }, 2000);
                     }
                 }

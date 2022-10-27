@@ -28,9 +28,42 @@
                                 <input type="text" name="name" class="form-control" placeholder="{{__('messages.new_attribute')}}" maxlength="191" value="{{ $attribute['name'] }}" required>
                             </div>
                         </div>
+                    </div>  
+
+                    @foreach ($sub_attr as $sub )
+                    
+                    <div class="row">
+                      
+
+                        <div class="col-3">{{$sub->Title}}  </div>
+                        <div class="col-3">
+                            
+                        
+                            <div class="form-check form-switch">
+                                <input class="form-check-input"  onclick="ChangeState('{{$sub->Title}}',{{$attribute['id']}} ,{{$loop->index}})"
+
+                                @if ($sub->state == 1)
+
+                                    checked='checked'
+                                    
+                                @endif
+                                
+                                
+                                type="checkbox" role="switch" id="flexSwitchCheckDefault">
+
+                              </div>
+                  
+                        </div>
+
+                      
+                       
+                                           
+                                            
+                            
+                 
                     </div>
-   
-                    <button type="submit" class="btn btn-primary">{{__('messages.update')}}</button>
+                    @endforeach
+                    <button type="submit" class="btn btn-primary mt-5">{{__('messages.update')}}</button>
                 </form>
             </div>
             <!-- End Table -->
@@ -42,3 +75,32 @@
 @push('script_2')
 
 @endpush
+
+
+
+<script>
+
+
+
+
+    function ChangeState(title,id,index){
+        $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.post({
+                url: '{{route('admin.attribute.update_sub_attribute')}}',
+                data: {title,id,index},
+                cache: false,
+                processData: true,
+                beforeSend: function () {
+                    $('#loading').show();
+                },
+
+                complete: function () {
+                    $('#loading').hide();
+                },
+            });
+    }
+</script>

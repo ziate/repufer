@@ -63,10 +63,15 @@
 
                     <li class="nav-item dropdown ">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                            @if( Config::get('languages')[App::getLocale()]['flag-icon'] == 'gb-eng')
+
+                            <img style="margin-top: -1.6px" src="https://cdn-icons-png.flaticon.com/512/4060/4060233.png" width='18' alt=""> {{ Config::get('languages')[App::getLocale()]['display'] }}
+                            @else
                             <span class="fi fi-{{Config::get('languages')[App::getLocale()]['flag-icon']}}"></span> {{ Config::get('languages')[App::getLocale()]['display'] }}
+                            @endif
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ url('lang/en') }}"><span class="fi fi-gb-eng "></span> English</a>
+                            <a class="dropdown-item" href="{{ url('lang/en') }}"><img src="https://cdn-icons-png.flaticon.com/512/4060/4060233.png" width='18' alt=""></span> English</a>
                             <a class="dropdown-item" href="{{ url('lang/ar') }}"><span class="fi fi-eg"></span> Arabic</a>
                         </div>
                     </li>

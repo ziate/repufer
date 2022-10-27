@@ -211,7 +211,7 @@
                                 <th style="width: 20%">{{__('messages.name')}}</th>
                                 <th style="width: 20%">{{__('messages.category')}}</th>
                                 <!--<th style="width: 15%">{{__('messages.restaurant')}}</th>-->
-                                <th>{{__('messages.price')}}</th>
+                               
                                 <th>{{__('messages.status')}}</th>
                                 <th>{{__('messages.action')}}</th>
                             </tr>
@@ -282,7 +282,7 @@
                                             <!--<td>-->
                                             <!--{{Str::limit($Fixed_Products->restaurant?$Fixed_Products->restaurant->name:__('messages.Restaurant deleted!'), 20, '...')}}-->
                                             <!--</td>-->
-                                            <td>{{\App\CentralLogics\Helpers::format_currency($Fixed_Products['price'])}}</td>
+                                           
                                             <td>
                                                 <label class="toggle-switch toggle-switch-sm" for="stocksCheckbox{{$Fixed_Products->id}}">
                                                     <input type="checkbox" onclick="location.href='{{route('admin.Fixed_Products.status',[$Fixed_Products['id'],$Fixed_Products->status?0:1])}}'"class="toggle-switch-input" id="stocksCheckbox{{$Fixed_Products->id}}" {{$Fixed_Products->status?'checked':''}}>

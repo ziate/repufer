@@ -5,7 +5,8 @@ return [
     'alert_restaurant_out_from_campaign'=> 'تريد محلك من هذه الحملة؟',
     'alert_restaurant_join_campaign' => 'تريد الانضمام إلى هذه الحملة؟',
     'about_us' => 'معلومات عنا',
-    'about_us_image'=>'صورة عنا',
+    'about_us_image'=>'صورة عنا', 
+    'vehicletype'=>'نوع المركبة', 
     'about_us_updated'=>'تم تحديث معلومات عنا',
     'about_the_campaign'=>'حول الحملة ...',
     'account_transaction'=>'معاملة الحساب',
@@ -18,6 +19,13 @@ return [
     'add_customer'=>'تسجيل عميل جديد',
     'update_discount'=>'خصم تحديث',
     'update_tax'=>'تحديث الضريبة',
+
+    'car' => 'سيارة',
+    'bike' => 'دراجه ',
+    'car' => 'موتسيكل',
+
+
+
     'addon' => 'اضافه',
     'add_to_cart'=>'أضف إلى السلة',
     'admin' => 'مسؤل',

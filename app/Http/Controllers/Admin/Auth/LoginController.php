@@ -48,7 +48,9 @@ class LoginController extends Controller
                     },
                 ],
             ]);
-        } else if(session('six_captcha') != $request->custome_recaptcha)
+        } 
+        
+        else if(session('six_captcha') != $request->custome_recaptcha)
         {
             Toastr::error(trans('messages.ReCAPTCHA Failed'));
             return back();
