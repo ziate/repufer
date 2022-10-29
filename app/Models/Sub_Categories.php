@@ -33,6 +33,12 @@ class Sub_Categories extends Model
         return $this->hasMany(Sub_Categories::class, 'parent_id');
     }
 
+    public function mainCategory()
+    {
+        return $this->belongsTo(Category::class, 'id');
+    }
+
+
     public function parent()
     {
         return $this->belongsTo(Sub_Categories::class, 'parent_id');

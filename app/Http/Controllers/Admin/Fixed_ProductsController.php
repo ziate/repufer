@@ -189,6 +189,7 @@ class Fixed_ProductsController extends Controller
     public function edit($id)
     {
         $product = Fixed_Products::withoutGlobalScope(RestaurantScope::class)->withoutGlobalScope('translate')->findOrFail($id);
+         $product->attributes = explode(',',json_decode($product->attributes)) ;
         if(!$product)
         {
             Toastr::error(trans('messages.Fixed_Products').' '.trans('messages.not_found'));
@@ -530,6 +531,22 @@ class Fixed_ProductsController extends Controller
         return view('admin-views.Fixed_Products.bulk-import');
     }
 
+    public function deleteMulti(request $Request ){
+
+        $ids =  $Request->selected;
+
+
+    //   return response()->json(['sate' => $ids],200);
+
+
+        foreach ($ids as  $value) {
+            Fixed_Products::find($value)->delete();
+        }
+        return response()->json(['sate' => 'Success'],200);
+
+
+    }
+
     public function bulk_import_data(Request $request)
     {
         try {
@@ -546,7 +563,7 @@ class Fixed_ProductsController extends Controller
             try
             {
                 DB::beginTransaction();
-                if ($collection['name'] === "" || $collection['name'] === "description" ||  $collection['category_id'] === ""  ) {
+                if ($collection['name'] === "" ||   $collection['category_id'] === ""  ) {
                     Toastr::error(trans('messages.please_fill_all_required_fields'));
                     return back();
                 }
@@ -559,8 +576,7 @@ class Fixed_ProductsController extends Controller
                     'image'                     => $collection['image'],
                     'brand_id'                  => $collection['brand_id'], 
                     'attributes'                => $collection['attributes'], 
-                    'choice_options'            => json_encode([]),
-                    'variations'                => json_encode([]),
+
                 ];
                 $food = Fixed_Products::create($data);
                 $data_translation = [];
@@ -606,7 +622,7 @@ class Fixed_ProductsController extends Controller
 
 
 
-        $products = Fixed_Products::select('name','description','image','category_id','category_ids','brand_id','attributes', 'brand_id')->get();
+        $products = Fixed_Products::select('name','description','category_id','category_ids','image','brand_id','attributes')->get();
         //  $products = DB::table('fixed_products')
         //  ->join('categories', 'fixed_products.category_id', '=', 'Categories.id')
         //  ->select('fixed_products.name','description' , 'categories.name')

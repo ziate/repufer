@@ -73,7 +73,10 @@
                                         @endif
                                     </select>
                                 </div>
-                                <!-- End Unfold -->
+
+                
+
+                                
 
                                 <!-- Unfold -->
                                 <div class="hs-unfold">
@@ -182,6 +185,11 @@
                             </div>
                         </div>
                         <!-- End Row -->
+                        <div class="col-auto">
+                                    
+                            <button id='btnDeleteMulti' class="btn btn-danger">Delete</button>
+                         </div>
+                        
                     </div>
                     <!-- End Header -->
 
@@ -214,6 +222,8 @@
                                
                                 <th>{{__('messages.status')}}</th>
                                 <th>{{__('messages.action')}}</th>
+                                <th>{{__('messages.select')}}</th>
+                              
                             </tr>
                             </thead>
 
@@ -259,6 +269,7 @@
                                                     @csrf @method('delete')
                                                 </form>
                                             </td>
+                                            
                                         </tr>
                                     @endif
                                 @else
@@ -303,6 +314,12 @@
                                                     @csrf @method('delete')
                                                 </form>
                                             </td>
+                                            <td>
+                                                <div class="selectedDelete" class="form-check">
+                                                    <input class="form-check-input" name='Selected' type="checkbox" value="{{$Fixed_Products['id']}}" id="flexCheckDefault">
+
+                                                  </div>
+                                            </td>
                                         </tr>
                                     @endif
                                 @endif
@@ -329,6 +346,47 @@
 
 @push('script_2')
     <script>
+   
+        $("#btnDeleteMulti").click(function () {
+            //Create an Array.
+                var selected = new Array();
+    
+                //Reference the CheckBoxes and insert the checked CheckBox value in Array.
+                $("#datatable .selectedDelete input[type=checkbox]:checked").each(function () {
+                    selected.push(this.value);
+                });
+
+            
+            if(selected.length == 0){
+                alert('NoThing Selected')
+                return
+            }
+            
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                type: "POST",
+                url: '{{route('admin.Fixed_Products.deleteMulti')}}',
+                data: {selected:selected},
+                beforeSend: function () {
+                    $('#loading').show();
+                },
+                success: function (data) {
+                    $('#loading').hide();
+                    setTimeout(() => location.reload(),1000)
+                  
+                }
+            });
+
+
+ 
+
+        });
+  
         $(document).on('ready', function () {
             // INITIALIZATION OF DATATABLES
             // =======================================================

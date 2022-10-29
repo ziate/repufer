@@ -9,9 +9,64 @@ use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\CentralLogics\Helpers;
+use Stripe\Customer;
 
 class CustomerController extends Controller
 {
+
+    public function edit($id){
+
+       $customer  =  User::where('id', $id)->with(['addresses'])->first();
+
+       
+        return view('admin-views.customer.edit', compact('customer'));
+
+    }
+
+    public function update(Request $request, $id) {
+        $request->validate([
+            'f_name' => 'required|max:100',
+            'l_name' => 'nullable|max:100',
+
+            'email' => 'required|unique:users,email,'.$id,
+            'phone' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:10|unique:users,phone,'.$id,
+
+        ]);
+
+        $User = user::find($id);
+
+        if ($request->has('image')) {
+            $image_name = Helpers::update('profile/', $User->image, 'png', $request->file('image'));
+        } else {
+            $image_name = $User['image'];
+        }
+
+        $User->f_name = $request->f_name;
+        $User->l_name = $request->l_name;
+        $User->email = $request->email;
+        $User->phone = $request->phone;
+        $User->user_name = $request->user_name;
+        $User->city = $request->city;
+        $User->address = $request->address;
+        $User->country = $request->country;
+        $User->image = $image_name;
+        $User->password = strlen($request->password)>1?bcrypt($request->password):$User['password'];
+        $User->save();
+        Toastr::success(trans('messages.customer'));
+        return redirect('admin/customer/list');
+    }
+
+    public function deleteMulti(request $Request ){
+
+        $ids =  $Request->selected;
+
+        foreach ($ids as  $value) {
+            User::find($value)->delete();
+        }
+        return response()->json(['sate' => 'Success'],200);
+
+
+    }
     public function customer_list(Request $request)
     {
         $key = [];

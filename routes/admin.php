@@ -187,8 +187,13 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
         });
 
             Route::group(['prefix' => 'Fixed_Products', 'as' => 'Fixed_Products.', 'middleware' => ['module:Fixed_Products']], function () {
+
+
                 Route::get('add-new', 'Fixed_ProductsController@index')->name('add-new');
-                Route::post('variant-combination', 'Fixed_ProductsController@variant_combination')->name('variant-combination');
+                Route::post('variant-combination', 'Fixed_ProductsController@variant_combination')->name('variant-combination');  
+
+
+                Route::post('deleteMulti', 'Fixed_ProductsController@deleteMulti')->name('deleteMulti');  
                 Route::post('store', 'Fixed_ProductsController@store')->name('store');
                 Route::get('edit/{id}', 'Fixed_ProductsController@edit')->name('edit');
                 Route::post('update/{id}', 'Fixed_ProductsController@update')->name('update');
@@ -492,9 +497,20 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
         });
 
         Route::group(['prefix' => 'customer', 'as' => 'customer.', 'middleware' => ['module:customerList']], function () {
+
             Route::get('list', 'CustomerController@customer_list')->name('list');
+
+            Route::get('edit/{user_id}', 'CustomerController@edit')->name('edit');
+
+            Route::post('update/{user_id}', 'CustomerController@update')->name('update');
+
+
             Route::get('view/{user_id}', 'CustomerController@view')->name('view');
             Route::post('search', 'CustomerController@search')->name('search');
+
+            Route::post('deleteMulti', 'CustomerController@deleteMulti')->name('deleteMulti');
+
+
             Route::get('status/{customer}/{status}', 'CustomerController@status')->name('status');
         });
 

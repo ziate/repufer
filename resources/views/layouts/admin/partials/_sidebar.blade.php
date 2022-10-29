@@ -538,7 +538,7 @@
 
                                 <!--------- Sub Sub Category ------------>
 
-                                <li class="nav-item {{Request::is('admin/Sub_Categories/add')?'active':''}}">
+                                {{-- <li class="nav-item {{Request::is('admin/Sub_Categories/add')?'active':''}}">
                                     <a class="nav-link " href="{{route('admin.Sub_Categories.add')}}"
                                        title="{{__('messages.Sub_Sub_Categories')}}">
                                         <span class="tio-circle nav-indicator-icon"></span>
@@ -552,7 +552,7 @@
                                         <span class="tio-circle nav-indicator-icon"></span>
                                         <span class="text-truncate">{{__('messages.Sub_Sub_Sub_Categories')}}</span>
                                     </a>
-                                </li>
+                                </li> --}}
 
                                 <!---------End Sub Sub Category ------------>
 

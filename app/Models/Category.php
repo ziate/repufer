@@ -27,10 +27,18 @@ class Category extends Model
         return $query->where('status', '=', 1);
     }
 
+
+
     public function childes()
     {
         return $this->hasMany(Category::class, 'parent_id');
     }
+
+    public function subCategories()
+    {
+        return $this->hasMany(Sub_Categories::class, 'parent_id');
+    }
+
 
     public function parent()
     {

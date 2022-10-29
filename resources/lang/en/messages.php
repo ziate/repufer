@@ -21,8 +21,9 @@ return [
     'car' => 'car',
     'bike' => 'bike ',
     'motorcycle' => 'motorcycle',
+    'city'=>'city',
 
-
+    'user name' => 'User name',
     'update_discount'=>'Update discount',
     'update_tax'=>'Update tax',
     'addon' => 'Addon',

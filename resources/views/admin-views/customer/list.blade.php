@@ -211,6 +211,11 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-auto">
+                                    
+                    <button id='btnDeleteMulti' class="btn btn-danger">Delete</button>
+                 </div>
+                
                 <!-- End Row -->
             </div>
             <!-- End Header -->
@@ -247,6 +252,7 @@
                         <th>{{__('messages.total')}} {{__('messages.order')}}</th>
                         <th>{{__('messages.active')}}/{{__('messages.inactive')}}</th>
                         <th>{{__('messages.actions')}}</th>
+                        <th>{{__('messages.select')}}</th>
                     </tr>
                     </thead>
 
@@ -284,6 +290,15 @@
                                 <a class="btn btn-sm btn-white"
                                     href="{{route('admin.customer.view',[$customer['id']])}}" title="{{__('messages.view')}} {{__('messages.customer')}}"><i class="tio-visible text-primary"></i>
                                 </a>
+                                <a class="btn btn-sm btn-white"
+                                href="{{route('admin.customer.edit',[$customer['id']])}}" title="{{__('messages.edit')}} {{__('messages.customer')}}"><i class="tio-edit text-primary"></i>
+                            </a>
+                            </td>
+                            <td>
+                                <div class="selectedDelete" class="form-check">
+                                    <input class="form-check-input" name='Selected' type="checkbox" value="{{$customer['id']}}" id="flexCheckDefault">
+
+                                  </div>
                             </td>
                         </tr>
                     @endforeach
@@ -314,6 +329,47 @@
 
 @push('script_2')
     <script>
+
+$("#btnDeleteMulti").click(function () {
+            //Create an Array.
+                var selected = new Array();
+    
+                //Reference the CheckBoxes and insert the checked CheckBox value in Array.
+                $("#datatable .selectedDelete input[type=checkbox]:checked").each(function () {
+                    selected.push(this.value);
+                });
+
+            
+            if(selected.length == 0){
+                alert('NoThing Selected')
+                return
+            }
+            
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                type: "POST",
+                url: '{{route('admin.customer.deleteMulti')}}',
+                data: {selected:selected},
+                beforeSend: function () {
+                    $('#loading').show();
+                },
+                success: function (data) {
+                    $('#loading').hide();
+                    setTimeout(() => location.reload(),1000)
+                  
+                }
+            });
+
+
+ 
+
+        });
+  
         function status_change_alert(url, message, e) {
             e.preventDefault();
             Swal.fire({

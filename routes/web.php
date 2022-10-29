@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Category;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -12,7 +13,9 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('test', 'TestController@index');
+Route::get('test1', function(){
+    return Category::with(['subCategories'])->get();
+});
 
 Route::get('lang/{locale}', [App\Http\Controllers\LanguageController::class,'switchLang']);
 Route::get('/', 'HomeController@index')->name('home');

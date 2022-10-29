@@ -159,37 +159,8 @@
                             </div>
                         </div>
 
-                        <div class="col-md-3 col-12">
-                            <div class="form-group">
-                                <label class="input-label" for="exampleFormControlSelect1">{{__('messages.sub_sub_category')}}<span
-                                        class="input-label-secondary" title="{{__('messages.category_required_warning')}}"><img src="{{asset('/public/assets/admin/img/info-circle.svg')}}" alt="{{__('messages.category_required_warning')}}"></span></label>
-                                <select name="sub_sub_category_id" id="sub_sub_category_id" onchange="getRequest('{{url('/')}}/admin/food/get-sub_categories?parent_id='+this.value,'sub_sub_sub_category_id')"
-                                        class="form-control js-select2-custom">
 
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-12">
-                            <div class="form-group">
-                                <label class="input-label" for="exampleFormControlSelect1">{{__('messages.sub_sub_sub_category')}}<span
-                                        class="input-label-secondary" title="{{__('messages.category_required_warning')}}"><img src="{{asset('/public/assets/admin/img/info-circle.svg')}}" alt="{{__('messages.category_required_warning')}}"></span></label>
-                                <select name="sub_sub_sub_category_id" id="sub_sub_sub_category_id"
-                                        class="form-control js-select2-custom">
 
-                                </select>
-                            </div>
-                        </div>
-                        {{--<div class="col-md-4 col-6">
-                            <div class="form-group">
-                                <label class="input-label" for="exampleFormControlSelect1">Sub Sub Category<span
-                                        class="input-label-secondary"></span></label>
-                                <select name="sub_sub_category_id" id="sub-sub-categories"
-                                        data-id="{{count($product_category)>=3?$product_category[2]->id:''}}"
-                                        class="form-control js-select2-custom">
-
-                                </select>
-                            </div>
-                        </div>--}}
 
                         <div class="col-md-6 col-12">
                             <div class="form-group">
@@ -214,14 +185,28 @@
                                         class="form-control js-select2-custom"
                                         multiple="multiple">
                                     @foreach(\App\Models\Attribute::orderBy('name')->get() as $attribute)
-                                        <option value="{{$attribute['id']}}" {{in_array($attribute->id,json_decode($product['attributes'],true))?'selected':''}}>{{$attribute['name']}}</option>
+                                        <option value="{{$attribute['id']}}" >{{$attribute['name']}}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-12 mt-2 mb-2">
                             <div class="customer_choice_options" id="customer_choice_options">
-                                @include('admin-views.product.partials._choices',['choice_no'=>json_decode($product['attributes']),'choice_options'=>json_decode($product['choice_options'],true)])
+
+                        @foreach(  $product['attributes']  as $choice)
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <input type="hidden" name="choice_no[]" value="{{$choice}}">
+                                    <input type="text" class="form-control" name="choice[]" value="{{$choice}}"
+                                        placeholder="{{__('messages.choice_title')}}" readonly>
+                                </div>
+                                <div class="col-lg-9">
+                                    <input type="text" class="form-control call-update-sku"  data-role="tagsinput"
+                                      >
+                                </div>
+                            </div>
+                        @endforeach
+
                             </div>
                         </div>
                         <div class="col-md-12 mt-2 mb-2">
@@ -235,57 +220,13 @@
                     
                     @php($sizes = collect(json_decode($product['sizes'])))
                     @php($nls = json_decode($product['nls']))
-{{-- 
-                    <div class="row">
-                            @foreach(\App\Models\Sizes::get() as $size)
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label class="input-label" for="exampleFormControlSelect1">{{__('messages.price')}} {{ $size->size }}  <span
-                                                class="input-label-secondary"></span></label>
-                                        <input type="number" name="sizes[{{ $size->size }}]" value="{{ $sizes[$size->size] }}" class="form-control">
-                                        
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div> --}}
-                        
-                        {{-- <div class="row">
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label class="input-label" for="exampleFormControlSelect1">NL<span
-                                            class="input-label-secondary"></span></label>
-                                    <select name="nls[]" 
-                                            class="form-control js-select2-custom"
-                                            multiple="multiple">
-                                        @foreach(\App\Models\Nl::get() as $nl)
-                                            @foreach($nls as $nn)
-                                                <option @if($nn == $nl['nl']) selected @endif value="{{$nl['nl']}}">{{$nl['nl']}}</option>
-                                            @endforeach
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        
-                         --}}
-                        
+
                     
                     
                     
                     
                     
-                    
-{{-- 
-                    <div class="row mt-2">
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label class="input-label" for="exampleFormControlSelect1">{{__('messages.addon')}}<span
-                                        class="input-label-secondary" title="{{__('messages.restaurant_required_warning')}}"><img src="{{asset('/public/assets/admin/img/info-circle.svg')}}" alt="{{__('messages.restaurant_required_warning')}}"></span></label>
-                                <select name="addon_ids[]" class="form-control js-select2-custom" multiple="multiple" id="add_on">
-                                </select>
-                            </div>
-                        </div>
-                    </div> --}}
+
 
                     <!--<div class="row">-->
                     <!--    <div class="col-6">-->
@@ -318,7 +259,7 @@
                             @if($product['image'] != null)
                                 @foreach(json_decode($product['image']) as $img)
                                     <img style="height: 200px;border: 1px solid; border-radius: 10px;" id="viewer"
-                                         src="{{asset('public/public/asset/admin/product')}}/{{$img}}"
+                                    src="{{asset('storage/app/public/product/' . $img)}}" 
                                          alt="product image"/>
                                 @endforeach
                             @endif
@@ -426,7 +367,8 @@
     <script src="{{asset('public/assets/admin')}}/js/tags-input.min.js"></script>
 
     <script>
-        $('#choice_attributes').on('change', function () {
+ 
+                            $('#choice_attributes').on('change', function () {
             $('#customer_choice_options').html(null);
             combination_update();
             $.each($("#choice_attributes option:selected"), function () {

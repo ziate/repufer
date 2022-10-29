@@ -427,7 +427,7 @@
                             ProgressBar: true
                         });
                         setTimeout(function () {
-                         // location.href = '{{\Request::server('HTTP_REFERER')??route('admin.Fixed_Products.list')}}';
+                          location.href = '{{\Request::server('HTTP_REFERER')??route('admin.Fixed_Products.list')}}';
                         }, 2000);
                     }
                 }
